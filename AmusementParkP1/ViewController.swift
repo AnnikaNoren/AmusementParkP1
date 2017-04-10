@@ -8,16 +8,35 @@
 
 import UIKit
 
+
+var parkEntrant: EntrantImplementation?
+
 class ViewController: UIViewController {
 
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
 
+        
+        let passGenerator = PassGenerator()
+        
+        //test cases
+        //
+        //parkEntrant = ClassicGuest()
+        //parkEntrant = VIPGuest()
+        parkEntrant = FreeChildGuest()
+        
+        if parkEntrant != nil {
+            passGenerator.createPass(for: parkEntrant!)
+        } else {
+            parkEntrant = nil
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+
     }
 
 

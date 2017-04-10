@@ -12,6 +12,9 @@
 		31021EE91E92B4CE00B72346 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31021EE71E92B4CE00B72346 /* Main.storyboard */; };
 		31021EEB1E92B4CE00B72346 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31021EEA1E92B4CE00B72346 /* Assets.xcassets */; };
 		31021EEE1E92B4CE00B72346 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31021EEC1E92B4CE00B72346 /* LaunchScreen.storyboard */; };
+		31021EF81E92CF7500B72346 /* Entrants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31021EF71E92CF7500B72346 /* Entrants.swift */; };
+		31021EFE1E99404500B72346 /* CodeGraveyard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31021EFD1E99404500B72346 /* CodeGraveyard.swift */; };
+		31021F001E995AC900B72346 /* PassGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31021EFF1E995AC900B72346 /* PassGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +25,9 @@
 		31021EEA1E92B4CE00B72346 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		31021EED1E92B4CE00B72346 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		31021EEF1E92B4CE00B72346 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		31021EF71E92CF7500B72346 /* Entrants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entrants.swift; sourceTree = "<group>"; };
+		31021EFD1E99404500B72346 /* CodeGraveyard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGraveyard.swift; sourceTree = "<group>"; };
+		31021EFF1E995AC900B72346 /* PassGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,10 +62,13 @@
 			children = (
 				31021EE31E92B4CE00B72346 /* AppDelegate.swift */,
 				31021EE51E92B4CE00B72346 /* ViewController.swift */,
+				31021EF71E92CF7500B72346 /* Entrants.swift */,
+				31021EFF1E995AC900B72346 /* PassGenerator.swift */,
 				31021EE71E92B4CE00B72346 /* Main.storyboard */,
 				31021EEA1E92B4CE00B72346 /* Assets.xcassets */,
 				31021EEC1E92B4CE00B72346 /* LaunchScreen.storyboard */,
 				31021EEF1E92B4CE00B72346 /* Info.plist */,
+				31021EFD1E99404500B72346 /* CodeGraveyard.swift */,
 			);
 			path = AmusementParkP1;
 			sourceTree = "<group>";
@@ -138,6 +147,9 @@
 			files = (
 				31021EE61E92B4CE00B72346 /* ViewController.swift in Sources */,
 				31021EE41E92B4CE00B72346 /* AppDelegate.swift in Sources */,
+				31021EFE1E99404500B72346 /* CodeGraveyard.swift in Sources */,
+				31021EF81E92CF7500B72346 /* Entrants.swift in Sources */,
+				31021F001E995AC900B72346 /* PassGenerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +277,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.inspireDo.AmusementParkP1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -277,6 +290,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.inspireDo.AmusementParkP1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
