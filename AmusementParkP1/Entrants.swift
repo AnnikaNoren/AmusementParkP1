@@ -1,5 +1,5 @@
 //
-//  Enum.swift
+//  Entrants.swift
 //  AmusementParkP1
 //
 //  Created by Annika Noren on 4/3/17.
@@ -15,31 +15,26 @@ enum TypeOfEntrant {
     case vipGuest
     case freeChildGuest
     case hourlyEmployeeFood
-    case hourlyEmployeeRide
+    case hourlyEmployeeRides
     case hourlyEmployeeMaintenence
     case manager
 }
 
+enum TypeOfErrors: Error {
+    case olderThanFive
+    case insufficientData
+    case invalidDate
+}
+
 protocol EntrantImplementation {
     var entrantType: TypeOfEntrant { get }
-    var personalInfo: PersonalInfo? { get }
-    //var dob: Birthday? { get }
+    var personalInfo: PersonalInfo { get }
     
     func areaAccess() -> AreaAccess
     func rideAccess() -> RideAccess
     func fooddiscountAccess() -> FoodAndMerchDiscount
-    func calculateAge() -> Bool
+    func verifyEntrant() throws -> Void
 }
-
-/*protocol Birthday {
-    var strDOB: String { get }
-    
-    func calculateAge() -> Bool
-}*/
-
-
-//protocol DailyGuest: EntrantType {}
-//protocol Employee: EntrantType {}
 
 struct AreaAccess {
     var amusement: Bool
@@ -60,21 +55,20 @@ struct FoodAndMerchDiscount {
 }
 
 struct PersonalInfo {
-    let firstName: String
-    let lastName: String
-    let city: String
-    let state: String
-    let zip: Int
+    var firstName: String?
+    var lastName: String?
+    var streetAddress: String?
+    var city: String?
+    var state: String?
+    var zip: String?
+    var dob: String?
 }
 
-/*struct Birthday {
-    var dob: Bool
-}*/
 
 struct ClassicGuest: EntrantImplementation {
     var entrantType = TypeOfEntrant.classicGuest
-    var personalInfo: PersonalInfo?
-    //var dob: Birthday?
+    var personalInfo: PersonalInfo = PersonalInfo(firstName: nil, lastName: nil, streetAddress: nil, city: nil, state: nil, zip: nil, dob: nil)
+    
 
     func areaAccess() -> AreaAccess {
         return AreaAccess(amusement: true, kitchenArea: false, rideControlArea: false, maintenanceArea: false, officeArea: false)
@@ -90,12 +84,14 @@ struct ClassicGuest: EntrantImplementation {
     
     func calculateAge() -> Bool {
         return false}
+    
+    func verifyEntrant() {}
 }
 
 struct VIPGuest: EntrantImplementation {
     var entrantType = TypeOfEntrant.vipGuest
-    var personalInfo: PersonalInfo?
-    //var dob: Birthday?
+    var personalInfo: PersonalInfo = PersonalInfo(firstName: nil, lastName: nil, streetAddress: nil, city: nil, state: nil, zip: nil, dob: nil)
+
     
     func areaAccess() -> AreaAccess {
         return AreaAccess(amusement: true, kitchenArea: false, rideControlArea: false, maintenanceArea: false, officeArea: false)
@@ -109,17 +105,18 @@ struct VIPGuest: EntrantImplementation {
         return FoodAndMerchDiscount(foodDiscount: 10, merchDiscount: 20)
     }
     
-    func calculateAge() -> Bool {
-        return false
-    }
-    
+    func verifyEntrant() {}
 }
 
 
 struct FreeChildGuest: EntrantImplementation {
     var entrantType = TypeOfEntrant.freeChildGuest
-    var personalInfo: PersonalInfo?
-    //var dob: Birthday?
+    var personalInfo: PersonalInfo =  PersonalInfo(firstName: nil, lastName: nil, streetAddress: nil, city: nil, state: nil, zip: nil, dob: nil)
+    
+    
+    init(dob: String){
+        self.personalInfo = PersonalInfo(firstName: nil, lastName: nil, streetAddress: nil, city: nil, state: nil, zip: nil, dob: dob)
+    }
     
     func areaAccess() -> AreaAccess {
         return AreaAccess(amusement: true, kitchenArea: false, rideControlArea: false, maintenanceArea: false, officeArea: false)
@@ -133,26 +130,157 @@ struct FreeChildGuest: EntrantImplementation {
         return FoodAndMerchDiscount(foodDiscount: 0, merchDiscount: 0)
     }
     
-    func calculateAge() -> Bool {
-        let strDOB = "2017-01-01"
+    
+    private func getAge() -> Int {
+        guard let strDOB = personalInfo.dob else {
+            return -1
+        }
+        //Disclaimer: This age calculation is not completely my code, I found it via google search
         let ageComponents = strDOB.components(separatedBy: "-")
         
         let dateDOB = Calendar.current.date(from: DateComponents(year:
             Int(ageComponents[0]), month: Int(ageComponents[1]), day:
             Int(ageComponents[2])))!
         
-        if dateDOB.age < 5 {
-            return true
-        } else {
-            return false
+        return dateDOB.age
+    }
+    
+    func verifyEntrant() throws {
+        if getAge() >= 5 {
+            throw TypeOfErrors.olderThanFive
         }
-
+        
+        if getAge() == -1 {
+            throw TypeOfErrors.invalidDate
+        }
     }
 }
 
 extension Date {
     var age: Int {
-        return Calendar.current.dateComponents([.year], from: self, to: Date()).year!
+        if let dcAge = Calendar.current.dateComponents([.year], from: self, to: Date()).year {
+            return dcAge
+        } else {
+            return -1
+        }
+    }
+}
+
+
+
+struct HourlyEmployeeFood: EntrantImplementation {
+    var entrantType = TypeOfEntrant.hourlyEmployeeFood
+    var personalInfo: PersonalInfo
+    
+    
+    init(personalInfo: PersonalInfo){
+        self.personalInfo = personalInfo
+    }
+
+    func areaAccess() -> AreaAccess {
+        return AreaAccess(amusement: true, kitchenArea: true, rideControlArea: false, maintenanceArea: false, officeArea: false)
     }
     
+    func rideAccess() -> RideAccess {
+        return RideAccess(allRides: true, skipLine: false)
+    }
+    
+    func fooddiscountAccess() -> FoodAndMerchDiscount {
+        return FoodAndMerchDiscount(foodDiscount: 15, merchDiscount: 25)
+    }
+    
+    func verifyEntrant() throws {
+        guard let _ = personalInfo.firstName, let _ = personalInfo.lastName, let _ = personalInfo.streetAddress,
+            let _ = personalInfo.city, let _ = personalInfo.state, let _ = personalInfo.zip else {
+                throw TypeOfErrors.insufficientData
+        }
+        
+    }
+}
+
+struct HourlyEmployeeRides: EntrantImplementation {
+    var entrantType = TypeOfEntrant.hourlyEmployeeRides
+    var personalInfo: PersonalInfo
+    
+    
+    init(personalInfo: PersonalInfo){
+        self.personalInfo = personalInfo
+    }
+    
+    func areaAccess() -> AreaAccess {
+        return AreaAccess(amusement: true, kitchenArea: false, rideControlArea: true, maintenanceArea: false, officeArea: false)
+    }
+    
+    func rideAccess() -> RideAccess {
+        return RideAccess(allRides: true, skipLine: false)
+    }
+    
+    func fooddiscountAccess() -> FoodAndMerchDiscount {
+        return FoodAndMerchDiscount(foodDiscount: 15, merchDiscount: 25)
+    }
+    
+    func verifyEntrant() throws {
+        guard let _ = personalInfo.firstName, let _ = personalInfo.lastName, let _ = personalInfo.streetAddress,
+            let _ = personalInfo.city, let _ = personalInfo.state, let _ = personalInfo.zip else {
+                throw TypeOfErrors.insufficientData
+            }
+    }
+}
+
+struct HourlyEmployeeMaintenance: EntrantImplementation {
+    var entrantType = TypeOfEntrant.hourlyEmployeeMaintenence
+    var personalInfo: PersonalInfo
+    
+    
+    init(personalInfo: PersonalInfo){
+        self.personalInfo = personalInfo
+    }
+    
+    func areaAccess() -> AreaAccess {
+        return AreaAccess(amusement: true, kitchenArea: false, rideControlArea: false, maintenanceArea: true, officeArea: false)
+    }
+    
+    func rideAccess() -> RideAccess {
+        return RideAccess(allRides: true, skipLine: false)
+    }
+    
+    func fooddiscountAccess() -> FoodAndMerchDiscount {
+        return FoodAndMerchDiscount(foodDiscount: 15, merchDiscount: 25)
+    }
+    
+    func verifyEntrant() throws {
+        guard let _ = personalInfo.firstName, let _ = personalInfo.lastName, let _ = personalInfo.streetAddress,
+            let _ = personalInfo.city, let _ = personalInfo.state, let _ = personalInfo.zip else {
+                throw TypeOfErrors.insufficientData
+        }
+    }
+}
+
+struct Manager: EntrantImplementation {
+    var entrantType = TypeOfEntrant.manager
+    var personalInfo: PersonalInfo
+    
+    init(personalInfo: PersonalInfo){
+        self.personalInfo = personalInfo
+    }
+
+    
+    func areaAccess() -> AreaAccess {
+        return AreaAccess(amusement: true, kitchenArea: true, rideControlArea: true, maintenanceArea: true, officeArea: true)
+    }
+    
+    func rideAccess() -> RideAccess {
+        return RideAccess(allRides: true, skipLine: false)
+    }
+    
+    func fooddiscountAccess() -> FoodAndMerchDiscount {
+        return FoodAndMerchDiscount(foodDiscount: 25, merchDiscount: 25)
+    }
+    
+    func verifyEntrant() throws {
+        guard let _ = personalInfo.firstName, let _ = personalInfo.lastName, let _ = personalInfo.streetAddress,
+            let _ = personalInfo.city, let _ = personalInfo.state, let _ = personalInfo.zip else {
+                throw TypeOfErrors.insufficientData
+        }
+    }
 }

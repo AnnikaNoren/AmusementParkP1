@@ -8,6 +8,13 @@
 
 import Foundation
 
+/*protocol Birthday {
+ var strDOB: String { get }
+ 
+ func calculateAge() -> Bool
+ }*/
+
+
 /*protocol GuestTraits {
  var guestType: GuestType { get set}
  var areaAccess: AreaAccess { get set }
@@ -168,4 +175,18 @@ import Foundation
  let merchDiscount = 0.25
  }
  */
-
+/*func createPass(for a: EntrantImplementation) {
+ //let parkEntrant = ClassicGuest()
+ swipe(entrant: parkEntrant!)
+ 
+ 
+ //swipe(entrant: ClassicGuest())
+ }
+ 
+ func swipe(entrant: EntrantImplementation) {
+ print("This entrant is a \(entrant.entrantType)")
+ print(entrant.areaAccess())
+ print(entrant.rideAccess())
+ print(entrant.fooddiscountAccess())
+ }*/
+    
